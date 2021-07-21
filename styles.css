@@ -54,9 +54,9 @@ main{
     height: 450px;
     background-color: rgba(225, 225, 225, .9);
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    flex-direction: column;
+    flex-direction: column; 
 }
 
 #box-2 img{
@@ -78,9 +78,26 @@ main{
 #recipe-text{
     font-size: 3em;
     text-align: center;
+    flex-grow: 0.5;
 }
 
+#button-container{
+    width: 100%;
+    display:flex;
+    justify-content: flex-end;
+    align-self: flex-end;
+}
 
+#clear-btn{
+    color: white;
+    background-color: #95a5a6;
+    width: 66px;
+    height: 31px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    border: none;
+    border-radius: 5px;
+}
 
 .options-form{
     display: flex;
