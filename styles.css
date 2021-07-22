@@ -75,8 +75,15 @@ main{
     font-size: 1em;
 }
 
-#recipe-text{
+.recipe-text{
     font-size: 3em;
+    text-align: center;
+    flex-grow: 0.5;
+}
+
+.meal-text{
+    margin-top: 20px;
+    font-size: 2em;
     text-align: center;
     flex-grow: 0.5;
 }
