@@ -5,9 +5,22 @@ var recipeText = document.getElementById('recipe-text-location');
 var shouldMakeText = document.getElementById('should-make-text');
 var letsCookBtn = document.getElementById('lets-cook-btn');
 var clearBtn = document.getElementById('clear-btn');
+var addARecipe = document.getElementById('add-a-recipe');
+var footer = document.querySelector('footer');
+var customRecipeForm = document.getElementById('custom-recipe-form');
+var recipeTypeInput = document.getElementById('recipe-type-input');
+var recipeNameInput = document.getElementById('recipe-name-input');
+
+//RADIO BUTTONS
+var sideRadioBtn = document.getElementById('side');
+var mainDishRadioBtn = document.getElementById('main-dish');
+var dessertRadioBtn = document.getElementById('dessert');
+var entireMealRadioBtn = document.getElementById('entire-meal');
 
 mealOptionForm.addEventListener('submit', checkCheckedButton);
 clearBtn.addEventListener('click', clearSelection);
+addARecipe.addEventListener('click', toggleRecipeForm);
+customRecipeForm.addEventListener('submit', customRecipeHandler);
 
 var activeButton;
 
@@ -47,63 +60,117 @@ function destroyRecipeText() {
     recipeText.removeChild(recipeText.firstChild)
 }
 
-function generateSingleRecipeText(recipeType){
+function toggleRecipeForm() {
+    footer.classList.toggle('hidden');
+}
+
+function generateSingleRecipeText(recipeType, customRecipeText='', opt_customRecipe=false){
     if(recipeText.firstChild){
-        console.log('Recipe txt first child');
         destroyRecipeText();
     } 
-        var newDiv = document.createElement('div');
+    hideElement(cookPotImg);
+    showElement(shouldMakeText);
+    showElement(clearBtn);
+    var newDiv = document.createElement('div');
+    if(opt_customRecipe){
+        newDiv.innerText = customRecipeText;
+    } else {
         newDiv.innerText = getRandomRecipe(recipeType) + '!';
-        recipeText.appendChild(newDiv);
+    }
+    recipeText.appendChild(newDiv);
 }
 
 function generateMealRecipeText() {
-    console.log(recipeText.firstChild);
     if(recipeText.firstChild){
         recipeText.removeChild(recipeText.firstChild);
     } 
+    hideElement(cookPotImg);
+    showElement(shouldMakeText);
+    showElement(clearBtn);
         var newDiv = document.createElement('div');
         newDiv.innerText = `${getRandomRecipe(mainDish)} with a side of ${getRandomRecipe(side)} and ${getRandomRecipe(dessert)} for dessert!`;
         recipeText.appendChild(newDiv);
 }
 
+function customRecipeHandler(event) {
+    event.preventDefault();
+    console.log(recipeTypeInput.value.toUpperCase(), recipeNameInput.value);
+    if(recipeTypeInput.value.toUpperCase() === 'SIDE'){
+        side.push(recipeNameInput.value);
+    } else if (recipeTypeInput.value.toUpperCase() === 'MAIN DISH'){
+        mainDish.push(recipeNameInput.value);
+    } else if (recipeTypeInput.value.toUpperCase === 'DESSERT'){
+        dessert.push(recipeNameInput.value);
+    }
+    generateSingleRecipeText(recipeTypeInput.value.toLowerCase(), recipeNameInput.value, true);
+    customRecipeForm.reset();
+}
+
 function checkCheckedButton(event){
     event.preventDefault();
-    for(var i = 0; i < radioButtons.length; i++){
-        if(radioButtons[i].checked){
-            if(radioButtons[i].id === 'side'){
-                hideElement(cookPotImg);
-                showElement(shouldMakeText);
-                showElement(clearBtn);
-                generateSingleRecipeText(side);
-                activeButton = radioButtons[i];
-                recipeText.classList.remove('meal-text');
-                recipeText.classList.add('recipe-text');
-            } else if(radioButtons[i].id === 'main-dish'){
-                hideElement(cookPotImg);
-                showElement(shouldMakeText);
-                showElement(clearBtn);
-                generateSingleRecipeText(mainDish);
-                activeButton = radioButtons[i];
-                recipeText.classList.remove('meal-text');
-                recipeText.classList.add('recipe-text');
-            } else if(radioButtons[i].id === 'dessert'){
-                hideElement(cookPotImg);
-                showElement(shouldMakeText);
-                showElement(clearBtn);
-                generateSingleRecipeText(dessert);
-                recipeText.classList.remove('meal-text');
-                recipeText.classList.add('recipe-text');
-                activeButton = radioButtons[i];
-            } else if(radioButtons[i].id === 'entire-meal'){
-                hideElement(cookPotImg);
-                showElement(shouldMakeText);
-                showElement(clearBtn);
-                generateMealRecipeText();
-                recipeText.classList.remove('recipe-text');
-                recipeText.classList.add('meal-text');
-                activeButton = radioButtons[i];
-            }
-        }
+    // hideElement(cookPotImg);
+    // showElement(shouldMakeText);
+    // showElement(clearBtn);
+
+    if(activeButton === entireMealRadioBtn){
+        recipeText.classList.remove('meal-text');
+        recipeText.classList.add('recipe-text');
+    }
+    if(sideRadioBtn.checked){
+        generateSingleRecipeText(side);
+        activeButton = sideRadioBtn;
+    } else if(mainDishRadioBtn.checked){
+        generateSingleRecipeText(mainDish);
+        activeButton = mainDishRadioBtn;
+    } else if(dessertRadioBtn.checked){
+        generateSingleRecipeText(dessert);
+        activeButton = dessertRadioBtn;
+    }else if(entireMealRadioBtn.checked){
+        generateMealRecipeText();
+        recipeText.classList.remove('recipe-text');
+        recipeText.classList.add('meal-text');
+        activeButton = entireMealRadioBtn;
     }
 }
+
+
+// function checkCheckedButton(event){
+//     event.preventDefault();
+//     for(var i = 0; i < radioButtons.length; i++){
+//         if(radioButtons[i].checked){
+//             if(radioButtons[i].id === 'side'){
+//                 hideElement(cookPotImg);
+//                 showElement(shouldMakeText);
+//                 showElement(clearBtn);
+//                 generateSingleRecipeText(side);
+//                 activeButton = radioButtons[i];
+//                 recipeText.classList.remove('meal-text');
+//                 recipeText.classList.add('recipe-text');
+//             } else if(radioButtons[i].id === 'main-dish'){
+//                 hideElement(cookPotImg);
+//                 showElement(shouldMakeText);
+//                 showElement(clearBtn);
+//                 generateSingleRecipeText(mainDish);
+//                 activeButton = radioButtons[i];
+//                 recipeText.classList.remove('meal-text');
+//                 recipeText.classList.add('recipe-text');
+//             } else if(radioButtons[i].id === 'dessert'){
+//                 hideElement(cookPotImg);
+//                 showElement(shouldMakeText);
+//                 showElement(clearBtn);
+//                 generateSingleRecipeText(dessert);
+//                 recipeText.classList.remove('meal-text');
+//                 recipeText.classList.add('recipe-text');
+//                 activeButton = radioButtons[i];
+//             } else if(radioButtons[i].id === 'entire-meal'){
+//                 hideElement(cookPotImg);
+//                 showElement(shouldMakeText);
+//                 showElement(clearBtn);
+//                 generateMealRecipeText();
+//                 recipeText.classList.remove('recipe-text');
+//                 recipeText.classList.add('meal-text');
+//                 activeButton = radioButtons[i];
+//             }
+//         }
+//     }
+// }

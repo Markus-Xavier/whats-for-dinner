@@ -8,12 +8,20 @@ red - #ee5253
 
 */
 
+.hidden{
+    display: none;
+}
+
 body{
     background-image: url(assets/burger-friends.jpg);
     background-size: 100%;
     background-repeat: no-repeat;
     margin: 0px;
     font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh;
 }
 
 header{
@@ -27,13 +35,30 @@ span{
     color: red;
 }
 
-#whats-for-dinner{
-    font-size: 175%;
-}
-
 main{
     display:flex;
     justify-content: space-around;
+    flex-grow: 1;
+}
+
+footer{
+    background-color: rgba(225, 225, 225, .9);
+    height: 75px;
+    display:flex;
+    align-items: center;
+}
+
+footer form{
+    display:flex;
+    margin-bottom: 0;
+}
+
+footer form div{
+    margin-left: 10px;
+}
+
+#whats-for-dinner{
+    font-size: 175%;
 }
 
 #box-1{
@@ -113,4 +138,13 @@ main{
 
 .option{
     margin-top: 16px;
+}
+
+.custom-meal{
+    margin-right: 20px;
+}
+
+.recipe-inputs{
+    width: 138px;
+    height: 31px;
 }

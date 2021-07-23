@@ -6,7 +6,7 @@
   <body>
     <header>
       <div id="whats-for-dinner"><strong>Whats for dinner?</strong></div>
-      <button>Add A Recipe</button>
+      <button id="add-a-recipe">Add A Recipe</button>
     </header>
     <main>
       <div id="box-1">
@@ -42,6 +42,19 @@
         </div>
       </div>
     </main>
+    <footer class="hidden">
+      <form id="custom-recipe-form">
+        <div class="custom-meal">
+          <label for="recipe-type-input">Recipe Type:</label>
+          <input id="recipe-type-input" class="recipe-inputs">
+        </div>
+        <div class="custom-meal">
+          <label for="recipe-name-input">Recipe Name:</label>
+          <input id="recipe-name-input" class="recipe-inputs">
+        </div>
+        <button>ADD NEW</button>
+      </form>
+    </footer>
   </body>
   <script type="text/javascript" src="main.js"></script>
   <script type="text/javascript" src="assets/recipies.js"></script>
