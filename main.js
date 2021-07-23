@@ -64,7 +64,7 @@ function toggleRecipeForm() {
     footer.classList.toggle('hidden');
 }
 
-function generateSingleRecipeText(recipeType, customRecipeText='', opt_customRecipe=false){
+function generateRecipeText(recipeType, opt_customRecipeText='', opt_customRecipe=false){
     if(recipeText.firstChild){
         destroyRecipeText();
     } 
@@ -73,23 +73,13 @@ function generateSingleRecipeText(recipeType, customRecipeText='', opt_customRec
     showElement(clearBtn);
     var newDiv = document.createElement('div');
     if(opt_customRecipe){
-        newDiv.innerText = customRecipeText;
+        newDiv.innerText = opt_customRecipeText;
+    } else if (recipeType === 'entire meal'){
+        newDiv.innerText = `${getRandomRecipe(mainDish)} with a side of ${getRandomRecipe(side)} and ${getRandomRecipe(dessert)} for dessert!`;
     } else {
         newDiv.innerText = getRandomRecipe(recipeType) + '!';
     }
     recipeText.appendChild(newDiv);
-}
-
-function generateMealRecipeText() {
-    if(recipeText.firstChild){
-        recipeText.removeChild(recipeText.firstChild);
-    } 
-    hideElement(cookPotImg);
-    showElement(shouldMakeText);
-    showElement(clearBtn);
-        var newDiv = document.createElement('div');
-        newDiv.innerText = `${getRandomRecipe(mainDish)} with a side of ${getRandomRecipe(side)} and ${getRandomRecipe(dessert)} for dessert!`;
-        recipeText.appendChild(newDiv);
 }
 
 function customRecipeHandler(event) {
@@ -102,7 +92,7 @@ function customRecipeHandler(event) {
     } else if (recipeTypeInput.value.toUpperCase === 'DESSERT'){
         dessert.push(recipeNameInput.value);
     }
-    generateSingleRecipeText(recipeTypeInput.value.toLowerCase(), recipeNameInput.value, true);
+    generateRecipeText(recipeTypeInput.value.toLowerCase(), recipeNameInput.value, true);
     customRecipeForm.reset();
 }
 
@@ -117,16 +107,16 @@ function checkCheckedButton(event){
         recipeText.classList.add('recipe-text');
     }
     if(sideRadioBtn.checked){
-        generateSingleRecipeText(side);
+        generateRecipeText(side);
         activeButton = sideRadioBtn;
     } else if(mainDishRadioBtn.checked){
-        generateSingleRecipeText(mainDish);
+        generateRecipeText(mainDish);
         activeButton = mainDishRadioBtn;
     } else if(dessertRadioBtn.checked){
-        generateSingleRecipeText(dessert);
+        generateRecipeText(dessert);
         activeButton = dessertRadioBtn;
     }else if(entireMealRadioBtn.checked){
-        generateMealRecipeText();
+        generateRecipeText('entire meal');
         recipeText.classList.remove('recipe-text');
         recipeText.classList.add('meal-text');
         activeButton = entireMealRadioBtn;
