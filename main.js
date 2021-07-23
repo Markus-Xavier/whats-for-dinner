@@ -17,12 +17,13 @@ var mainDishRadioBtn = document.getElementById('main-dish');
 var dessertRadioBtn = document.getElementById('dessert');
 var entireMealRadioBtn = document.getElementById('entire-meal');
 
-mealOptionForm.addEventListener('submit', checkCheckedButton);
+mealOptionForm.addEventListener('submit', checkRadioButtons);
 clearBtn.addEventListener('click', clearSelection);
 addARecipe.addEventListener('click', toggleRecipeForm);
 customRecipeForm.addEventListener('submit', customRecipeHandler);
 
 var activeButton;
+var currentRecipe;
 
 function disableElement(element){
     element.disabled = true;
@@ -32,7 +33,7 @@ function enableElement(element){
     element.disabled = false;
 }
 
-function getRandomIndex(array) {
+function getRandomIndex(array){
     return Math.floor(Math.random() * array.length);
 }
 
@@ -44,7 +45,27 @@ function showElement(element){
     element.hidden = false;
 }
 
-function clearSelection() {
+
+function getRandomRecipe(){
+    var randomSide = side[getRandomIndex(side)];
+    var randomMainDish = mainDish[getRandomIndex(mainDish)];
+    var randomDessert = dessert[getRandomIndex(dessert)];
+    return {
+        side: randomSide,
+        main: randomMainDish,
+        dessert: randomDessert
+    }
+}
+
+function destroyRecipeText(){
+    recipeText.removeChild(recipeText.firstChild)
+}
+
+function toggleRecipeForm(){
+    footer.classList.toggle('hidden');
+}
+
+function clearSelection(){
     destroyRecipeText();
     hideElement(shouldMakeText);
     hideElement(clearBtn);
@@ -52,115 +73,63 @@ function clearSelection() {
     activeButton.checked = false;
 }
 
-function getRandomRecipe(recipeType) {
-    return recipeType[getRandomIndex(recipeType)];
-}
-
-function destroyRecipeText() {
-    recipeText.removeChild(recipeText.firstChild)
-}
-
-function toggleRecipeForm() {
-    footer.classList.toggle('hidden');
-}
-
 function generateRecipeText(recipeType, opt_customRecipeText='', opt_customRecipe=false){
     if(recipeText.firstChild){
         destroyRecipeText();
-    } 
+    }
+
     hideElement(cookPotImg);
     showElement(shouldMakeText);
     showElement(clearBtn);
+
+    var randomizedRecipe = getRandomRecipe();
     var newDiv = document.createElement('div');
     if(opt_customRecipe){
         newDiv.innerText = opt_customRecipeText;
+        randomizedRecipe[recipeType] = opt_customRecipeText;
     } else if (recipeType === 'entire meal'){
-        newDiv.innerText = `${getRandomRecipe(mainDish)} with a side of ${getRandomRecipe(side)} and ${getRandomRecipe(dessert)} for dessert!`;
+        newDiv.innerText = `${randomizedRecipe.main} with a side of ${randomizedRecipe.side} and ${randomizedRecipe.dessert} for dessert!`; 
     } else {
-        newDiv.innerText = getRandomRecipe(recipeType) + '!';
+        newDiv.innerText = randomizedRecipe[recipeType] + '!';
     }
+    currentRecipe = randomizedRecipe;
     recipeText.appendChild(newDiv);
+    console.log(currentRecipe);
 }
 
-function customRecipeHandler(event) {
+function customRecipeHandler(event){
     event.preventDefault();
-    console.log(recipeTypeInput.value.toUpperCase(), recipeNameInput.value);
-    if(recipeTypeInput.value.toUpperCase() === 'SIDE'){
+    var recipeType = recipeTypeInput.value.toUpperCase()
+    if(recipeType === 'SIDE'){
         side.push(recipeNameInput.value);
-    } else if (recipeTypeInput.value.toUpperCase() === 'MAIN DISH'){
+    } else if (recipeType === 'MAIN DISH'){
         mainDish.push(recipeNameInput.value);
-    } else if (recipeTypeInput.value.toUpperCase === 'DESSERT'){
+    } else if (recipeType === 'DESSERT'){
         dessert.push(recipeNameInput.value);
     }
     generateRecipeText(recipeTypeInput.value.toLowerCase(), recipeNameInput.value, true);
     customRecipeForm.reset();
 }
 
-function checkCheckedButton(event){
+function checkRadioButtons(event){
     event.preventDefault();
-    // hideElement(cookPotImg);
-    // showElement(shouldMakeText);
-    // showElement(clearBtn);
-
     if(activeButton === entireMealRadioBtn){
         recipeText.classList.remove('meal-text');
         recipeText.classList.add('recipe-text');
     }
     if(sideRadioBtn.checked){
-        generateRecipeText(side);
+        generateRecipeText('side');
         activeButton = sideRadioBtn;
     } else if(mainDishRadioBtn.checked){
-        generateRecipeText(mainDish);
+        generateRecipeText('main');
         activeButton = mainDishRadioBtn;
     } else if(dessertRadioBtn.checked){
-        generateRecipeText(dessert);
+        generateRecipeText('dessert');
         activeButton = dessertRadioBtn;
-    }else if(entireMealRadioBtn.checked){
+    } else if(entireMealRadioBtn.checked){
         generateRecipeText('entire meal');
         recipeText.classList.remove('recipe-text');
         recipeText.classList.add('meal-text');
         activeButton = entireMealRadioBtn;
     }
 }
-
-
-// function checkCheckedButton(event){
-//     event.preventDefault();
-//     for(var i = 0; i < radioButtons.length; i++){
-//         if(radioButtons[i].checked){
-//             if(radioButtons[i].id === 'side'){
-//                 hideElement(cookPotImg);
-//                 showElement(shouldMakeText);
-//                 showElement(clearBtn);
-//                 generateSingleRecipeText(side);
-//                 activeButton = radioButtons[i];
-//                 recipeText.classList.remove('meal-text');
-//                 recipeText.classList.add('recipe-text');
-//             } else if(radioButtons[i].id === 'main-dish'){
-//                 hideElement(cookPotImg);
-//                 showElement(shouldMakeText);
-//                 showElement(clearBtn);
-//                 generateSingleRecipeText(mainDish);
-//                 activeButton = radioButtons[i];
-//                 recipeText.classList.remove('meal-text');
-//                 recipeText.classList.add('recipe-text');
-//             } else if(radioButtons[i].id === 'dessert'){
-//                 hideElement(cookPotImg);
-//                 showElement(shouldMakeText);
-//                 showElement(clearBtn);
-//                 generateSingleRecipeText(dessert);
-//                 recipeText.classList.remove('meal-text');
-//                 recipeText.classList.add('recipe-text');
-//                 activeButton = radioButtons[i];
-//             } else if(radioButtons[i].id === 'entire-meal'){
-//                 hideElement(cookPotImg);
-//                 showElement(shouldMakeText);
-//                 showElement(clearBtn);
-//                 generateMealRecipeText();
-//                 recipeText.classList.remove('recipe-text');
-//                 recipeText.classList.add('meal-text');
-//                 activeButton = radioButtons[i];
-//             }
-//         }
-//     }
-// }
