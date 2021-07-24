@@ -10,6 +10,7 @@ var footer = document.querySelector('footer');
 var customRecipeForm = document.getElementById('custom-recipe-form');
 var recipeTypeInput = document.getElementById('recipe-type-input');
 var recipeNameInput = document.getElementById('recipe-name-input');
+var saveRecipeButton = document.getElementById('save-recipe-button');
 
 //RADIO BUTTONS
 var sideRadioBtn = document.getElementById('side');
@@ -21,9 +22,16 @@ mealOptionForm.addEventListener('submit', checkRadioButtons);
 clearBtn.addEventListener('click', clearSelection);
 addARecipe.addEventListener('click', toggleRecipeForm);
 customRecipeForm.addEventListener('submit', customRecipeHandler);
+saveRecipeButton.addEventListener('click', saveRecipeHandler);
 
 var activeButton;
 var currentRecipe;
+var savedRecipes = {
+        sides: [],
+        main: [],
+        dessert: [],
+        entireMeal: []
+    };
 
 function disableElement(element){
     element.disabled = true;
@@ -44,7 +52,6 @@ function hideElement(element){
 function showElement(element){
     element.hidden = false;
 }
-
 
 function getRandomRecipe(){
     var randomSide = side[getRandomIndex(side)];
@@ -69,6 +76,7 @@ function clearSelection(){
     destroyRecipeText();
     hideElement(shouldMakeText);
     hideElement(clearBtn);
+    hideElement(saveRecipeButton);
     showElement(cookPotImg);
     activeButton.checked = false;
 }
@@ -78,9 +86,13 @@ function generateRecipeText(recipeType, opt_customRecipeText='', opt_customRecip
         destroyRecipeText();
     }
 
+    if(recipeType === 'main dish'){
+        recipeType = 'main';
+    }
     hideElement(cookPotImg);
     showElement(shouldMakeText);
     showElement(clearBtn);
+    showElement(saveRecipeButton);
 
     var randomizedRecipe = getRandomRecipe();
     var newDiv = document.createElement('div');
@@ -99,13 +111,22 @@ function generateRecipeText(recipeType, opt_customRecipeText='', opt_customRecip
 
 function customRecipeHandler(event){
     event.preventDefault();
-    var recipeType = recipeTypeInput.value.toUpperCase()
+    var recipeType = recipeTypeInput.value.toUpperCase();
     if(recipeType === 'SIDE'){
         side.push(recipeNameInput.value);
+        activeButton = sideRadioBtn;
+        sideRadioBtn.checked = true;
     } else if (recipeType === 'MAIN DISH'){
         mainDish.push(recipeNameInput.value);
+        activeButton = mainDishRadioBtn;
+        mainDishRadioBtn.checked = true;
     } else if (recipeType === 'DESSERT'){
         dessert.push(recipeNameInput.value);
+        activeButton = dessertRadioBtn;
+        dessertRadioBtn.checked = true;
+    } else {
+        alert('Use the right things');
+        return;
     }
     generateRecipeText(recipeTypeInput.value.toLowerCase(), recipeNameInput.value, true);
     customRecipeForm.reset();
@@ -132,4 +153,28 @@ function checkRadioButtons(event){
         recipeText.classList.add('meal-text');
         activeButton = entireMealRadioBtn;
     }
+}
+
+function saveRecipeHandler() {
+    switch (activeButton.id) {
+        case 'entire-meal':
+            savedRecipes.entireMeal.push(currentRecipe);
+            break;
+        
+        case 'side':
+            savedRecipes.sides.push(currentRecipe.side);
+            break;
+    
+        case 'main-dish':
+            savedRecipes.main.push(currentRecipe.main);
+            break;
+
+        case 'dessert':
+            savedRecipes.dessert.push(currentRecipe.dessert);
+            break;
+
+        default:
+            break;
+    }
+    console.log(savedRecipes);
 }
