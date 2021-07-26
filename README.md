@@ -1,23 +1,45 @@
-# What's for Dinner?
+# Title
+Mod 1 + Whats For Dinner?
 
-## Overview
 
-What's for dinner? The ultimate question. You will be building an app that helps users choose a recipe and put together meals. 
+## Table of Contents
+  - [Abstract](#abstract)
+  - [Technologies](#technologies)
+  - [Code Architecture](#code-architecture)
+  - [Illustrations](#illustrations)
+  - [Install + Setup](#set-up)
+  - [Contributors](#contributors)
+	- [Wins](#wins)
+	- [Challenges + Improvements](#challenges-+-Improvements)
+  - [Project Specs](#project-specs)
 
-This Solo Challenge gives students and instructors the opportunity to get a pulse on where you are with the foundational concepts of Module 1 curriculum. Students should use this as an opportunity to challenge themselves and work completely independently. Google can (and probably should!) be used, but any other code base should not be referenced. Instructors will be able to use your work, both completion of functionality and code quality, to determine where you stand and if you are behind for this point in the module, provide supports to intervene.
+## Abstract
+	This web app was made to help users choose a dish or meal to make. The goal was to complete all itterations and every choose your own adventure!
 
-The spec for this project can be found [here](https://frontend.turing.io/projects/module-1/dinner.html). 
+## Technologies
+  - Vanilla Javascript
+  - node
+  - VSCode
 
-## Learning Goals
 
-- Gain experience building an application that utilizes HTML, CSS and JavaScript
-- Write HTML and CSS to match a provided comp
-- Understand how to listen to and respond to user events
-- Individualize your programming skill set
+## Install + Setup
+	- This app can be accessed by cloning down this repo and opening the index.html file. Usernames and Passwords are stored inside of local storage.
 
-## Setup
 
-- Fork this project to your own Github account
-- Clone the repository to your local machine
-- `cd` into the project
-- Read this README thoroughly, then begin working!
+
+## Contributors
+  - [Markus-Xavier Rossio](https://github.com/Markus-Xavier)
+
+## Wins
+	- I got through a lot of what I wanted to.
+	- I got to research local stroage for the username and password saving
+  - My code base in most parts is modular.
+
+## Challenges + Improvements
+	- My commits were good in the beginning but started to become more infrequent, this is something that I plan to change in the next project.
+	- Due to time management issues there were a couple of bugs left in. 
+	- I would like to finish the login functionality and add a recipe save feature. I would also like to work with an actcual backend vs just using local storage.
+
+
+## Project Specs
+  - The project spec & rubric can be found [here](https://frontend.turing.edu/projects/module-1/dinner.html)
