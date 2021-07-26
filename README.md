@@ -45,7 +45,7 @@ Mod 1 + Whats For Dinner?
 
 
 ## Contributors
-  - [Markus-Xavier Rossio](https://github.com/Markus-Xavier)
+  - [Markus-Xavier Rossio](https://github.com/Markus-Xavier) ![ratwithhat](https://user-images.githubusercontent.com/48008726/126930660-dbc916e3-928f-4fbd-ae86-3646bfc0c58c.png)
 
 ## Wins
 - I got through a lot of what I wanted to.
@@ -54,7 +54,7 @@ Mod 1 + Whats For Dinner?
 
 ## Challenges + Improvements
 - My commits were good in the beginning but started to become more infrequent, this is something that I plan to change in the next project.
-- Due to time management issues there were a couple of bugs left in. 
+- Due to less than optimal time management issues there were a couple of bugs left in. 
 - I would like to finish the login functionality and add a recipe save feature. I would also like to work with an actcual backend vs just using local storage.
 
 
