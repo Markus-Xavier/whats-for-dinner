@@ -27,6 +27,8 @@ var optionsEnum = {
     SIDE: 'side'
 };
 
+var logInAttempts = 0;
+
 //RADIO BUTTONS
 var sideRadioBtn = document.getElementById(optionsEnum.SIDE);
 var mainDishRadioBtn = document.getElementById(optionsEnum.MAIN_DISH);
@@ -237,6 +239,13 @@ function logInHandler(event) {
     var usernameValue = usernameInput.value;
     var passwordValue = passwordInput.value;
 
+    if(event.submitter.id === 'guest-button'){
+        signInPage.classList.add('hidden');
+        mainPage.classList.remove('hidden');
+        currentUserText.innerText = `, Guest`;
+        return;
+    }
+
     if(event.submitter.id === 'sign-up-button'){
         var newUser = new User(
             usernameValue,
@@ -246,6 +255,10 @@ function logInHandler(event) {
         );
 
         newUser.saveUser('dinnerUsers');
+        currentUser = newUser;
+        signInPage.classList.add('hidden');
+        mainPage.classList.remove('hidden');
+        currentUserText.innerText = `, ${currentUser.username}`;
         logInForm.reset();
     } else {
         var userData = storageHandler.checkStorageArrayForItem('dinnerUsers', usernameValue, 'username');
@@ -258,10 +271,11 @@ function logInHandler(event) {
             )
             signInPage.classList.add('hidden');
             mainPage.classList.remove('hidden');
-            currentUserText.innerText = `, ${userData.username}`;
+            currentUserText.innerText = `, ${currentUser.username}`;
         } else {
-            alert('Username or Password incorrect!')
+            
+            alert('Username or Password is Incorrect!');
+            } 
         }
     }
 
-}
