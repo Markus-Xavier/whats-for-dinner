@@ -44,6 +44,7 @@ window.addEventListener('load', function(){
     storageHandler.initializeStorage('dinnerActiveUser', '');
 });
 
+var currentUser;
 var currentRecipe;
 var savedRecipes = {
         sides: [],
@@ -249,10 +250,15 @@ function logInHandler(event) {
     } else {
         var userData = storageHandler.checkStorageArrayForItem('dinnerUsers', usernameValue, 'username');
         if(userData && userData.password === passwordValue){
+            currentUser = new User(
+                userData.username,
+                userData.password,
+                currentRecipe,
+                storageHandler
+            )
             signInPage.classList.add('hidden');
             mainPage.classList.remove('hidden');
             currentUserText.innerText = `, ${userData.username}`;
-            console.log('signing in...');
         } else {
             alert('Username or Password incorrect!')
         }
