@@ -1,5 +1,5 @@
-# Title
-Mod 1 + Whats For Dinner?
+# Whats For Dinner?
+Mod 1
 
 
 ## Table of Contents
