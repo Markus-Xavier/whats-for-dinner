@@ -12,7 +12,7 @@ class StorageHandler{
     }
 
     storeToExistingArray(localStorageKey, stringifiedContent){
-        var gettingLocalStorage = localStorage.getItem(key);
+        var gettingLocalStorage = localStorage.getItem(localStorageKey);
         var existingArray = JSON.parse(gettingLocalStorage);
         existingArray.push(stringifiedContent);
         localStorage.setItem(localStorageKey, JSON.stringify(existingArray));

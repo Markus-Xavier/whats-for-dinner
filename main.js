@@ -251,7 +251,7 @@ function logInHandler(event) {
         if(userData && userData.password === passwordValue){
             signInPage.classList.add('hidden');
             mainPage.classList.remove('hidden');
-            currentUserText.innerText = `${userData.username}`;
+            currentUserText.innerText = `, ${userData.username}`;
             console.log('signing in...');
         } else {
             alert('Username or Password incorrect!')
