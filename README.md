@@ -45,7 +45,8 @@ Mod 1 + Whats For Dinner?
 
 
 ## Contributors
-  - [Markus-Xavier Rossio](https://github.com/Markus-Xavier) ![ratwithhat](https://user-images.githubusercontent.com/48008726/126930660-dbc916e3-928f-4fbd-ae86-3646bfc0c58c.png)
+  - [Markus-Xavier Rossio](https://github.com/Markus-Xavier) 
+![ratwithhat](https://user-images.githubusercontent.com/48008726/126930660-dbc916e3-928f-4fbd-ae86-3646bfc0c58c.png)
 
 ## Wins
 - I got through a lot of what I wanted to.
