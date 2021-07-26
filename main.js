@@ -11,20 +11,39 @@ var customRecipeForm = document.getElementById('custom-recipe-form');
 var recipeTypeInput = document.getElementById('recipe-type-input');
 var recipeNameInput = document.getElementById('recipe-name-input');
 var saveRecipeButton = document.getElementById('save-recipe-button');
+var logInForm = document.getElementById('log-in-form');
+var usernameInput = document.getElementById('username');
+var passwordInput = document.getElementById('password');
+var signInPage = document.getElementById('sign-in-page');
+var mainPage = document.getElementById('main-page');
+var currentUserText = document.getElementById('current-user');
+
+var storageHandler = new StorageHandler();
+
+var optionsEnum = {
+    DESSERT: 'dessert',
+    ENTIRE_MEAL: 'entire-meal',
+    MAIN_DISH: 'main-dish',
+    SIDE: 'side'
+};
 
 //RADIO BUTTONS
-var sideRadioBtn = document.getElementById('side');
-var mainDishRadioBtn = document.getElementById('main-dish');
-var dessertRadioBtn = document.getElementById('dessert');
-var entireMealRadioBtn = document.getElementById('entire-meal');
+var sideRadioBtn = document.getElementById(optionsEnum.SIDE);
+var mainDishRadioBtn = document.getElementById(optionsEnum.MAIN_DISH);
+var dessertRadioBtn = document.getElementById(optionsEnum.DESSERT);
+var entireMealRadioBtn = document.getElementById(optionsEnum.ENTIRE_MEAL);
 
 mealOptionForm.addEventListener('submit', checkRadioButtons);
 clearBtn.addEventListener('click', clearSelection);
 addARecipe.addEventListener('click', toggleRecipeForm);
 customRecipeForm.addEventListener('submit', customRecipeHandler);
 saveRecipeButton.addEventListener('click', saveRecipeHandler);
+logInForm.addEventListener('submit', logInHandler);
+window.addEventListener('load', function(){
+    storageHandler.initializeStorage('dinnerUsers', JSON.stringify([]));
+    storageHandler.initializeStorage('dinnerActiveUser', '');
+});
 
-var activeButton;
 var currentRecipe;
 var savedRecipes = {
         sides: [],
@@ -53,19 +72,40 @@ function showElement(element){
     element.hidden = false;
 }
 
-function getRandomRecipe(){
-    var randomSide = side[getRandomIndex(side)];
-    var randomMainDish = mainDish[getRandomIndex(mainDish)];
-    var randomDessert = dessert[getRandomIndex(dessert)];
-    return {
-        side: randomSide,
-        main: randomMainDish,
-        dessert: randomDessert
+function getRandomRecipe(recipeType){
+    var food = {
+        side: '',
+        mainDish: '',
+        dessert: ''
+    };
+
+    switch (recipeType) {
+        case optionsEnum.SIDE:
+            food.side = side[getRandomIndex(side)];
+            break;
+
+        case optionsEnum.MAIN_DISH:
+            food.mainDish = mainDish[getRandomIndex(mainDish)];
+            break;
+
+        case optionsEnum.DESSERT:
+            food.dessert = dessert[getRandomIndex(dessert)];
+            break;
+
+        case optionsEnum.ENTIRE_MEAL:
+            food.side = side[getRandomIndex(side)];
+            food.mainDish = mainDish[getRandomIndex(mainDish)];
+            food.dessert = dessert[getRandomIndex(dessert)];
+            break;
+
+        default:
+            break;
     }
+    return food;
 }
 
 function destroyRecipeText(){
-    recipeText.removeChild(recipeText.firstChild)
+    recipeText.removeChild(recipeText.firstChild);
 }
 
 function toggleRecipeForm(){
@@ -78,103 +118,144 @@ function clearSelection(){
     hideElement(clearBtn);
     hideElement(saveRecipeButton);
     showElement(cookPotImg);
-    activeButton.checked = false;
+    getCheckedRadioButton().checked = false;
 }
 
-function generateRecipeText(recipeType, opt_customRecipeText='', opt_customRecipe=false){
+function getCheckedRadioButton(){
+    return document.querySelector('input[name="options"]:checked');
+}
+
+function generateRecipeText(recipeType, opt_customRecipeText=''){
     if(recipeText.firstChild){
         destroyRecipeText();
     }
 
-    if(recipeType === 'main dish'){
-        recipeType = 'main';
+    if(recipeType !== optionsEnum.ENTIRE_MEAL){
+        recipeText.classList.remove('meal-text');
+        recipeText.classList.add('recipe-text');
+    } else {
+        recipeText.classList.add('meal-text');
+        recipeText.classList.remove('recipe-text');
     }
+
     hideElement(cookPotImg);
     showElement(shouldMakeText);
     showElement(clearBtn);
     showElement(saveRecipeButton);
 
-    var randomizedRecipe = getRandomRecipe();
+    var randomizedRecipe = getRandomRecipe(recipeType);
     var newDiv = document.createElement('div');
-    if(opt_customRecipe){
+    if(opt_customRecipeText.length){
         newDiv.innerText = opt_customRecipeText;
-        randomizedRecipe[recipeType] = opt_customRecipeText;
-    } else if (recipeType === 'entire meal'){
-        newDiv.innerText = `${randomizedRecipe.main} with a side of ${randomizedRecipe.side} and ${randomizedRecipe.dessert} for dessert!`; 
+        randomizedRecipe[findRecipeWithValue(randomizedRecipe)] = opt_customRecipeText;
+    } else if (recipeType === optionsEnum.ENTIRE_MEAL){
+        newDiv.innerText = `${randomizedRecipe.mainDish} with a side of ${randomizedRecipe.side} and ${randomizedRecipe.dessert} for dessert!`; 
     } else {
-        newDiv.innerText = randomizedRecipe[recipeType] + '!';
+        newDiv.innerText = randomizedRecipe[findRecipeWithValue(randomizedRecipe)] + '!';
     }
     currentRecipe = randomizedRecipe;
     recipeText.appendChild(newDiv);
     console.log(currentRecipe);
 }
 
+function findRecipeWithValue(recipe){
+    var recipeKeys = Object.keys(recipe);
+    for(var i = 0; i < recipeKeys.length; i++){
+        if(recipe[recipeKeys[i]].length){
+            return recipeKeys[i];
+        }
+    }
+}
+
 function customRecipeHandler(event){
     event.preventDefault();
-    var recipeType = recipeTypeInput.value.toUpperCase();
-    if(recipeType === 'SIDE'){
-        side.push(recipeNameInput.value);
-        activeButton = sideRadioBtn;
-        sideRadioBtn.checked = true;
-    } else if (recipeType === 'MAIN DISH'){
-        mainDish.push(recipeNameInput.value);
-        activeButton = mainDishRadioBtn;
-        mainDishRadioBtn.checked = true;
-    } else if (recipeType === 'DESSERT'){
-        dessert.push(recipeNameInput.value);
-        activeButton = dessertRadioBtn;
-        dessertRadioBtn.checked = true;
-    } else {
-        alert('Use the right things');
-        return;
-    }
-    generateRecipeText(recipeTypeInput.value.toLowerCase(), recipeNameInput.value, true);
-    customRecipeForm.reset();
-}
+    var recipeType = recipeTypeInput.value;
 
-function checkRadioButtons(event){
-    event.preventDefault();
-    if(activeButton === entireMealRadioBtn){
-        recipeText.classList.remove('meal-text');
-        recipeText.classList.add('recipe-text');
-    }
-    if(sideRadioBtn.checked){
-        generateRecipeText('side');
-        activeButton = sideRadioBtn;
-    } else if(mainDishRadioBtn.checked){
-        generateRecipeText('main');
-        activeButton = mainDishRadioBtn;
-    } else if(dessertRadioBtn.checked){
-        generateRecipeText('dessert');
-        activeButton = dessertRadioBtn;
-    } else if(entireMealRadioBtn.checked){
-        generateRecipeText('entire meal');
-        recipeText.classList.remove('recipe-text');
-        recipeText.classList.add('meal-text');
-        activeButton = entireMealRadioBtn;
-    }
-}
-
-function saveRecipeHandler() {
-    switch (activeButton.id) {
-        case 'entire-meal':
-            savedRecipes.entireMeal.push(currentRecipe);
-            break;
-        
-        case 'side':
-            savedRecipes.sides.push(currentRecipe.side);
-            break;
-    
-        case 'main-dish':
-            savedRecipes.main.push(currentRecipe.main);
+    switch(recipeType){
+        case optionsEnum.SIDE:
+            side.push(recipeNameInput.value);
+            sideRadioBtn.checked = true;
             break;
 
-        case 'dessert':
-            savedRecipes.dessert.push(currentRecipe.dessert);
+        case optionsEnum.MAIN_DISH:
+            mainDish.push(recipeNameInput.value);
+            mainDishRadioBtn.checked = true;
+            break;
+
+        case optionsEnum.DESSERT:
+            dessert.push(recipeNameInput.value);
+            dessertRadioBtn.checked = true;
             break;
 
         default:
             break;
     }
-    console.log(savedRecipes);
+
+    generateRecipeText(recipeTypeInput.value.toLowerCase(), recipeNameInput.value);
+    customRecipeForm.reset();
+}
+
+function checkRadioButtons(event){
+    event.preventDefault();
+    var activeRadio = getCheckedRadioButton();
+    if(activeRadio){
+        generateRecipeText(activeRadio.id);
+    }
+}
+
+function saveRecipeHandler() {
+    var activeRadio = getCheckedRadioButton();
+    if(activeRadio){
+        switch (activeRadio.id) {
+            case optionsEnum.ENTIRE_MEAL:
+                savedRecipes.entireMeal.push(currentRecipe);
+                break;
+
+            case optionsEnum.SIDE:
+                savedRecipes.sides.push(currentRecipe.side);
+                break;
+
+            case optionsEnum.MAIN_DISH:
+                savedRecipes.main.push(currentRecipe.main);
+                break;
+
+            case optionsEnum.DESSERT:
+                savedRecipes.dessert.push(currentRecipe.dessert);
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+
+function logInHandler(event) {
+    event.preventDefault();
+
+    var usernameValue = usernameInput.value;
+    var passwordValue = passwordInput.value;
+
+    if(event.submitter.id === 'sign-up-button'){
+        var newUser = new User(
+            usernameValue,
+            passwordValue,
+            currentRecipe,
+            storageHandler
+        );
+
+        newUser.saveUser('dinnerUsers');
+        logInForm.reset();
+    } else {
+        var userData = storageHandler.checkStorageArrayForItem('dinnerUsers', usernameValue, 'username');
+        if(userData && userData.password === passwordValue){
+            signInPage.classList.add('hidden');
+            mainPage.classList.remove('hidden');
+            currentUserText.innerText = `${userData.username}`;
+            console.log('signing in...');
+        } else {
+            alert('Username or Password incorrect!')
+        }
+    }
+
 }

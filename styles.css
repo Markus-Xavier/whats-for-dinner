@@ -7,13 +7,11 @@ red - #ee5253
 
 */
 
-.hidden{
-    display: none;
-}
+
 
 body{
     background-image: url(assets/burger-friends.jpg);
-    background-size: 100%;
+    background-size: cover;
     background-repeat: no-repeat;
     margin: 0px;
     font-family: 'Roboto', sans-serif;
@@ -42,7 +40,7 @@ header{
     background-color: #0fb9b1;
 }
 
-span{
+#asterik{
     color: red;
 }
 
@@ -160,11 +158,31 @@ footer form div{
     height: 31px;
 }
 
+.log-in{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 600px;
+}
+
+.log-in-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 500px;
+    background-color: rgba(225, 225, 225, .9);
+}
+
 #saved-section{
     height: 550px;
     background-color: rgba(225, 225, 225, .9);
     margin-top: 100px;
     margin-left: 75px;
     margin-right: 75px;
+}
 
+.hidden{
+    display: none;
 }

@@ -5,13 +5,35 @@
   </head>
   <body>
     <header>
-      <div id="whats-for-dinner"><strong>Whats for dinner?</strong></div>
+      <div id="whats-for-dinner"><strong>Whats for dinner <span id=current-user></span>?</strong></div>
       <button id="add-a-recipe">Add A Recipe</button>
     </header>
-    <main>
+
+<section class="log-in" id="sign-in-page">
+  <div class="log-in-box">
+    <h1>Welcome!</h1>
+    <form id="log-in-form">
+      <div class="option">
+        <label for="username">Username:</label>
+        <input id="username">
+      </div>
+      <div class="option">
+        <label for="password">Password:</label>
+        <input id="password">
+      </div>
+      <div class="option">
+        <button id="log-in-button">Log In</button>
+        <button id="sign-up-button">Sign Up</button>
+      </div>
+      <div>
+    </form>
+  </div>
+</section>
+
+    <main id="main-page" class="hidden">
       <div id="box-1">
         <form id="meal-option-form">
-          <h1>What are you looking for?<span>*</span></h1>
+          <h1>What are you looking for?<span id='asterik'>*</span></h1>
           <div class="options-form">
             <div class="option">
               <input id="side" type="radio" name="options">
@@ -47,7 +69,11 @@
       <form id="custom-recipe-form">
         <div class="custom-meal">
           <label for="recipe-type-input">Recipe Type:</label>
-          <input id="recipe-type-input" class="recipe-inputs" required>
+          <select type="select" id="recipe-type-input" class="recipe-inputs" required>
+            <option value="side">Side</option>
+            <option value="main-dish">Main Dish</option>
+            <option value="dessert">Dessert</option>
+          </select>
         </div>
         <div class="custom-meal">
           <label for="recipe-name-input">Recipe Name:</label>
@@ -57,6 +83,8 @@
       </form>
     </footer>
   </body>
+  <script type="text/javascript" src="storage.js"></script>
   <script type="text/javascript" src="main.js"></script>
   <script type="text/javascript" src="assets/recipies.js"></script>
+  <script type="text/javascript" src="user.js"></script>
 </html>
